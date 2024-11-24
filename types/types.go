@@ -21,4 +21,10 @@ type Product struct {
 
 type UserStore interface {
 	CreateNewUser(User) error
+	GetUserByEmail(email string) (*User, error)
+}
+
+type NewUserPayload struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=3,max=130"`
 }
