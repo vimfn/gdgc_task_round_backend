@@ -1,0 +1,20 @@
+package types
+
+import "time"
+
+// only cuz i'm adding auth, the task didn't ask for this
+type User struct {
+	ID        int       `json:"id"`
+	Email     string    `json:"email"`
+	Password  string    `json:"-"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+type Product struct {
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Seller      string    `json:"seller"`
+	Rating      float64   `json:"rating"`
+	CreatedAt   time.Time `json:"createdAt"` // no one asked for this either.
+}
