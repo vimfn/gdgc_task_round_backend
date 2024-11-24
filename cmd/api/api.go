@@ -2,10 +2,12 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"vitshop.vimfn.in/utils"
 )
 
 type APIServer struct {
@@ -29,8 +31,13 @@ func (s *APIServer) Run() error {
 
 	// register product routes
 
-	// TODO: do a normal healthcheck
-	router.PathPrefix("/").Handler()
+	// TODO: do a normal healthcheck or maybe
+	router.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		utils.WriteJSON(w, http.StatusOK,
+			map[string]interface{}{
+				"data": "hi seniors 👻",
+			})
+	})
 
 	log.Println("Listening on", s.addr)
 	return http.ListenAndServe(s.addr, router)
