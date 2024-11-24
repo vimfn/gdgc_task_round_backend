@@ -18,3 +18,7 @@ type Product struct {
 	Rating      float64   `json:"rating"`
 	CreatedAt   time.Time `json:"createdAt"` // no one asked for this either.
 }
+
+type UserStore interface {
+	CreateNewUser(User) error
+}
