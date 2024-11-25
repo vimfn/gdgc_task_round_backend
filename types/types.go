@@ -40,10 +40,10 @@ type CreateProductPayload struct {
 }
 
 type UpdateProductPayload struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	// Seller      string `json:"seller"` // can't update seller ??
-	Rating uint8 `json:"rating" validate:"gte=1,lte=5"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	// Seller      string `json:"seller, omniempty"` // can't update seller ??
+	Rating *uint8 `json:"rating,omitempty" validate:"omitempty,gte=1,lte=5"`
 }
 
 type NewUserPayload struct {

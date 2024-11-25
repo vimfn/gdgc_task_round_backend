@@ -3,6 +3,7 @@ package product
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	"vitshop.vimfn.in/types"
 )
@@ -59,26 +60,43 @@ func (s *Store) CreateProduct(product types.CreateProductPayload) (*types.Produc
 	return nil, nil
 }
 
-func (s *Store) UpdateProduct(productID int, product types.UpdateProductPayload) (*types.Product, error) {
-	_, err := s.db.Exec("UPDATE products SET title = ?, description = ?, seller = ?, rating = ? WHERE id = ?", product.Title, product.Description, product.Rating, productID)
+func (s *Store) UpdateProduct(productID int, payload types.UpdateProductPayload) (*types.Product, error) {
+	currentProduct, err := s.GetProductByID(productID)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO: return that prod by id
-	p := new(types.Product)
+	// build the update query dynamically based on which fields are provided
+	updates := []string{}
+	args := []interface{}{}
 
-	return p, nil
+	if payload.Title != nil {
+		updates = append(updates, "title = ?")
+		args = append(args, *payload.Title)
+	}
+	if payload.Description != nil {
+		updates = append(updates, "description = ?")
+		args = append(args, *payload.Description)
+	}
+	if payload.Rating != nil {
+		updates = append(updates, "rating = ?")
+		args = append(args, *payload.Rating)
+	}
+
+	if len(updates) == 0 {
+		return currentProduct, nil
+	}
+
+	args = append(args, productID)
+
+	query := fmt.Sprintf("UPDATE products SET %s WHERE id = ?", strings.Join(updates, ", "))
+	_, err = s.db.Exec(query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.GetProductByID(productID)
 }
-
-// func (s *Store) DeleteProductByID(productID int) error {
-// 	_, err := s.db.Exec("DELETE FROM products WHERE id = ?", productID)
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	return nil
-// }
 
 func (s *Store) DeleteProductByID(productID int) error {
 	result, err := s.db.Exec("DELETE FROM products WHERE id = ?", productID)

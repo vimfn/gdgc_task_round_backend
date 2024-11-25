@@ -149,5 +149,9 @@ func (h *Handler) handleUpdateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, updatedProduct)
+	// utils.WriteJSON(w, http.StatusCreated, updatedProduct)
+	utils.WriteJSON(w, http.StatusCreated,
+		map[string]interface{}{
+			"data": updatedProduct,
+		})
 }
