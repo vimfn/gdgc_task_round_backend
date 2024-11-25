@@ -13,7 +13,7 @@ make sure you have docker (and the plugin `docker-compose`) installed.
 ```
 git clone https://github.com/vimfn/gdgc_task_round_backend --depth=1
 cd gdgc_task_round_backend
-docker-compose up --build
+docker compose up --build
 ```
 
 ### without docker (more pain)
