@@ -52,7 +52,7 @@ func scanRowsIntoProduct(rows *sql.Rows) (*types.Product, error) {
 }
 
 func (s *Store) CreateProduct(product types.CreateProductPayload) (*types.Product, error) {
-	rating := uint8(0)
+	rating := float64(0)
 	if product.Rating != nil {
 		rating = *product.Rating
 	}

@@ -15,7 +15,7 @@ type Product struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Seller      string    `json:"seller"`
-	Rating      uint8     `json:"rating"`
+	Rating      float64   `json:"rating"`
 	CreatedAt   time.Time `json:"createdAt"` // no one asked for this either.
 }
 
@@ -33,10 +33,10 @@ type ProductStore interface {
 }
 
 type CreateProductPayload struct {
-	Title       string `json:"title" validate:"required"`
-	Description string `json:"description"  validate:"required"`
-	Seller      string `json:"seller" validate:"required"`
-	Rating      *uint8 `json:"rating,omitempty" validate:"omitempty,gte=1,lte=5"` // this is marked optional in tasks
+	Title       string   `json:"title" validate:"required"`
+	Description string   `json:"description"  validate:"required"`
+	Seller      string   `json:"seller" validate:"required"`
+	Rating      *float64 `json:"rating,omitempty" validate:"omitempty,gte=1,lte=5"` // this is marked optional in tasks
 }
 
 type UpdateProductPayload struct {
