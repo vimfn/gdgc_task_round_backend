@@ -1,8 +1,7 @@
 #!/bin/bash
 
-#
 # why no real tests ?
-# 1. i'm not paid enough to implement a robust backend api, which i'd in a prod env, this is the best you get for free :p
+# 1. i'm not paid enough to implement a robust backend api with a test suite, which i'd obv in a prod env, this is the best you get for free :p
 # 2. the task didn't ask to write test cases anyway.
 
 # Base URL for the API (replace with your actual API endpoint)

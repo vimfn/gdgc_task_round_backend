@@ -57,12 +57,23 @@ func (s *Store) CreateProduct(product types.CreateProductPayload) (*types.Produc
 		rating = *product.Rating
 	}
 
-	_, err := s.db.Exec("INSERT INTO products (title, description, seller, rating) VALUES (?, ?, ?, ?)",
+	res, err := s.db.Exec("INSERT INTO products (title, description, seller, rating) VALUES (?, ?, ?, ?)",
 		product.Title, product.Description, product.Seller, rating)
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+
+	lastID, err := res.LastInsertId()
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve last insert ID: %w", err)
+	}
+
+	lastAddedProduct, err := s.GetProductByID(int(lastID))
+	if err != nil {
+		return nil, err
+	}
+
+	return lastAddedProduct, nil
 }
 
 func (s *Store) UpdateProduct(productID int, payload types.UpdateProductPayload) (*types.Product, error) {

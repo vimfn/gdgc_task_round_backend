@@ -71,30 +71,33 @@ func (h *Handler) handleGetProductById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
-	var newProd types.CreateProductPayload
+	var createProdPayload types.CreateProductPayload
 
-	fmt.Println(r)
+	// fmt.Println(r)
 
-	if err := utils.ParseJSON(r, &newProd); err != nil {
+	if err := utils.ParseJSON(r, &createProdPayload); err != nil {
 		fmt.Println("fked in parsing")
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	if err := utils.Validate.Struct(newProd); err != nil {
+	if err := utils.Validate.Struct(createProdPayload); err != nil {
 		fmt.Println("fked in validation")
 		errors := err.(validator.ValidationErrors)
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
 		return
 	}
 
-	_, err := h.store.CreateProduct(newProd)
+	newProd, err := h.store.CreateProduct(createProdPayload)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, newProd)
+	utils.WriteJSON(w, http.StatusCreated,
+		map[string]interface{}{
+			"data": newProd,
+		})
 }
 
 func (h *Handler) handleDeleteProduct(w http.ResponseWriter, r *http.Request) {
@@ -152,7 +155,6 @@ func (h *Handler) handleUpdateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// utils.WriteJSON(w, http.StatusCreated, updatedProduct)
 	utils.WriteJSON(w, http.StatusCreated,
 		map[string]interface{}{
 			"data": updatedProduct,
