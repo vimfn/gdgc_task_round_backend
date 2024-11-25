@@ -36,7 +36,7 @@ type CreateProductPayload struct {
 	Title       string `json:"title" validate:"required"`
 	Description string `json:"description"  validate:"required"`
 	Seller      string `json:"seller" validate:"required"`
-	Rating      uint8  `json:"rating" validate:"required,gte=1,lte=5"`
+	Rating      *uint8 `json:"rating,omitempty" validate:"omitempty,gte=1,lte=5"` // this is marked optional in tasks
 }
 
 type UpdateProductPayload struct {

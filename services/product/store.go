@@ -52,11 +52,16 @@ func scanRowsIntoProduct(rows *sql.Rows) (*types.Product, error) {
 }
 
 func (s *Store) CreateProduct(product types.CreateProductPayload) (*types.Product, error) {
-	_, err := s.db.Exec("INSERT INTO products (title, description, seller, rating) VALUES (?, ?, ?, ?)", product.Title, product.Description, product.Seller, product.Rating)
+	rating := uint8(0)
+	if product.Rating != nil {
+		rating = *product.Rating
+	}
+
+	_, err := s.db.Exec("INSERT INTO products (title, description, seller, rating) VALUES (?, ?, ?, ?)",
+		product.Title, product.Description, product.Seller, rating)
 	if err != nil {
 		return nil, err
 	}
-
 	return nil, nil
 }
 

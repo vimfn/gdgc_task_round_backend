@@ -40,7 +40,9 @@ func (h *Handler) handleGetProducts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, products)
+	utils.WriteJSON(w, http.StatusOK, map[string]interface{}{
+		"data": products,
+	})
 }
 
 func (h *Handler) handleGetProductById(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +65,9 @@ func (h *Handler) handleGetProductById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, product)
+	utils.WriteJSON(w, http.StatusOK, map[string]interface{}{
+		"data": product,
+	})
 }
 
 func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +88,6 @@ func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: Get updated product
 	_, err := h.store.CreateProduct(newProd)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
