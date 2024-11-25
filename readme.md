@@ -1,3 +1,5 @@
+**hi seniors, if you are looking for the hosted url as mentioned later in the readme i couldn't host a go backend in a serverless platform(eg vercel, netlify) to compensate that i have added dockerfile to spin it up locally with just one command (ez.) , and also a handy shell script to test all endpoints in one go, still you want me to host it temporarily lmk in my uni email, i'll be happy to do so.**
+
 ## quick start
 
 steps here are for unix (macOS and linux) systems, if you are on windows use WSL.
@@ -23,8 +25,9 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_NAME=vitshop
 ```
+step 2: run the `migration.sql` to get the products table and seed with same sample data.
 
-step 2: install [air](https://github.com/air-verse/air) to have hot reloads and other cool stuff.
+step 3: install [air](https://github.com/air-verse/air) to have hot reloads and other cool stuff.
 
 ```
 air -c .air.toml
@@ -36,7 +39,7 @@ with gnu makefiles
 make run
 ```
 
-# good to know 
+## good to know 
 
 - written in go, not ts/js or nodejs/deno/bun
 - uses *repository pattern*, diff stores for each services
@@ -50,6 +53,6 @@ make run
 - a minimal shell script (not real) which will hopefully pass all test cases of the given task
     - lmk if you want me to add some real test
 
-# architecture overview
+## architecture overview
 
 ![shop.png](./.github/shop.png)
