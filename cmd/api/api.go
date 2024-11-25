@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"vitshop.vimfn.in/services/product"
 	"vitshop.vimfn.in/services/user"
 	"vitshop.vimfn.in/utils"
 )
@@ -33,6 +34,9 @@ func (s *APIServer) Run() error {
 	userHandler.RegisterRouter(router)
 
 	// register product routes
+	productStore := product.NewStore(s.db)
+	productHandler := product.NewHandler(productStore, userStore)
+	productHandler.RegisterRoutes(router)
 
 	// TODO: do a normal healthcheck or maybe
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

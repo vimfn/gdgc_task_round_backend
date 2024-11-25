@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS products (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `seller` VARCHAR(255) NOT NULL,
+  `rating` TINYINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);

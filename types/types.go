@@ -15,13 +15,35 @@ type Product struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Seller      string    `json:"seller"`
-	Rating      float64   `json:"rating"`
+	Rating      uint8     `json:"rating"`
 	CreatedAt   time.Time `json:"createdAt"` // no one asked for this either.
 }
 
 type UserStore interface {
 	CreateNewUser(User) error
-	GetUserByEmail(email string) (*User, error)
+	GetUserByEmail(string) (*User, error)
+}
+
+type ProductStore interface {
+	GetProducts() ([]*Product, error)
+	GetProductByID(int) (*Product, error)
+	DeleteProductByID(int) error
+	CreateProduct(CreateProductPayload) (*Product, error)
+	UpdateProduct(int, UpdateProductPayload) (*Product, error)
+}
+
+type CreateProductPayload struct {
+	Title       string `json:"title" validate:"required"`
+	Description string `json:"description"  validate:"required"`
+	Seller      string `json:"seller" validate:"required"`
+	Rating      uint8  `json:"rating" validate:"required,gte=1,lte=5"`
+}
+
+type UpdateProductPayload struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	// Seller      string `json:"seller"` // can't update seller ??
+	Rating uint8 `json:"rating" validate:"gte=1,lte=5"`
 }
 
 type NewUserPayload struct {
