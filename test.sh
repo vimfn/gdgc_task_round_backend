@@ -5,7 +5,7 @@
 # 2. the task didn't ask to write test cases anyway.
 
 # Base URL for the API (replace with your actual API endpoint)
-BASE_URL="http://localhost:8000"
+BASE_URL="http://localhost:8080"
 
 # Create a new listing
 echo "1. Creating a new listing:"

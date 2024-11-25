@@ -16,9 +16,6 @@ type Config struct {
 	DBPass string
 	DBAddr string
 	DBName string
-
-	JWTSecret              string
-	JWTExpirationInSeconds int64
 }
 
 var Envs = initConfig()
@@ -36,10 +33,6 @@ func initConfig() Config {
 		DBPass: getEnv("DB_PASSWORD", "mypassword"),
 		DBAddr: fmt.Sprintf("%s:%s", getEnv("DB_HOST", "127.0.0.1"), getEnv("DB_PORT", "3306")),
 		DBName: getEnv("DB_NAME", "vitshop"),
-
-		// Auth
-		JWTSecret:              getEnv("JWT_SECRET", "nevergonnagiveyouup"),
-		JWTExpirationInSeconds: getEnvAsInt("JWT_EXPIRATION_IN_SECONDS", 3600*24*7),
 	}
 }
 

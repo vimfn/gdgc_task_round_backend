@@ -12,20 +12,16 @@ import (
 )
 
 type Handler struct {
-	store     types.ProductStore
-	userStore types.UserStore
+	store types.ProductStore
 }
 
-func NewHandler(store types.ProductStore, userStore types.UserStore) *Handler {
-	return &Handler{store: store, userStore: userStore}
+func NewHandler(store types.ProductStore) *Handler {
+	return &Handler{store: store}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/listing", h.handleGetProducts).Methods(http.MethodGet)
 	router.HandleFunc("/listing/{productID}", h.handleGetProductById).Methods(http.MethodGet)
-
-	// TODO: make protected routes
-	// router.HandleFunc("/listing", auth.WithJWTAuth(h.handleCreateProduct, h.userStore)).Methods(http.MethodPost)
 
 	router.HandleFunc("/listing", h.handleCreateProduct).Methods(http.MethodPost)
 
