@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"vitshop.vimfn.in/services/auth"
 	"vitshop.vimfn.in/types"
 	"vitshop.vimfn.in/utils"
 )
@@ -24,13 +25,10 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/listing", h.handleGetProducts).Methods(http.MethodGet)
 	router.HandleFunc("/listing/{productID}", h.handleGetProductById).Methods(http.MethodGet)
 
-	// TODO: make protected routes
-	// router.HandleFunc("/listing", auth.WithJWTAuth(h.handleCreateProduct, h.userStore)).Methods(http.MethodPost)
+	router.HandleFunc("/listing", auth.WithJWTAuth(h.handleCreateProduct, h.userStore)).Methods(http.MethodPost)
 
-	router.HandleFunc("/listing", h.handleCreateProduct).Methods(http.MethodPost)
-
-	router.HandleFunc("/listing/{productID}", h.handleUpdateProduct).Methods(http.MethodPut)
-	router.HandleFunc("/listing/{productID}", h.handleDeleteProduct).Methods(http.MethodDelete)
+	router.HandleFunc("/listing/{productID}", auth.WithJWTAuth(h.handleUpdateProduct, h.userStore)).Methods(http.MethodPut)
+	router.HandleFunc("/listing/{productID}", auth.WithJWTAuth(h.handleDeleteProduct, h.userStore)).Methods(http.MethodDelete)
 }
 
 func (h *Handler) handleGetProducts(w http.ResponseWriter, r *http.Request) {

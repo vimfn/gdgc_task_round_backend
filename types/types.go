@@ -21,6 +21,7 @@ type Product struct {
 
 type UserStore interface {
 	CreateNewUser(User) error
+	GetUserByID(id int) (*User, error)
 	GetUserByEmail(string) (*User, error)
 }
 
