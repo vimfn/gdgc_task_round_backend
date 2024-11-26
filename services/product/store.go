@@ -21,13 +21,16 @@ func (s *Store) GetProductByID(productID int) (*types.Product, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	p := new(types.Product)
-	for rows.Next() {
-		p, err = scanRowsIntoProduct(rows)
-		if err != nil {
-			return nil, err
-		}
+	// check if any rows were returned
+	if !rows.Next() {
+		return nil, fmt.Errorf("product with ID %d not found", productID)
+	}
+
+	p, err := scanRowsIntoProduct(rows)
+	if err != nil {
+		return nil, err
 	}
 
 	return p, nil
@@ -42,7 +45,7 @@ func scanRowsIntoProduct(rows *sql.Rows) (*types.Product, error) {
 		&product.Description,
 		&product.Seller,
 		&product.Rating,
-		&product.CreatedAt,
+		&product.CreatedAt, // the tasks didn't asked for it again
 	)
 	if err != nil {
 		return nil, err

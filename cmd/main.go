@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
@@ -22,24 +21,15 @@ func main() {
 		ParseTime:            true,
 	}
 
-	db, err := db.NewMySQLStorage(cfg)
+	dbConn, err := db.NewMySQLStorage(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	initDB(db)
+	db.InitDB(dbConn)
 
-	server := api.NewAPIServer(fmt.Sprintf(":%s", configs.Envs.Port), db)
+	server := api.NewAPIServer(fmt.Sprintf(":%s", configs.Envs.Port), dbConn)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func initDB(db *sql.DB) {
-	err := db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("INFO: DB connected!")
 }

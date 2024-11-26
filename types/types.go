@@ -29,6 +29,6 @@ type CreateProductPayload struct {
 type UpdateProductPayload struct {
 	Title       *string `json:"title,omitempty"`
 	Description *string `json:"description,omitempty"`
-	// Seller      string `json:"seller, omniempty"` // can't update seller ??
+	// Seller      string `json:"seller, omniempty"` // can't update the seller ?? as the tasks asked for.
 	Rating *uint8 `json:"rating,omitempty" validate:"omitempty,gte=1,lte=5"`
 }

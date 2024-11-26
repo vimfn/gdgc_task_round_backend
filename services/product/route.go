@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -20,7 +21,7 @@ func NewHandler(store types.ProductStore) *Handler {
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/listing", h.handleGetProducts).Methods(http.MethodGet)
+	router.HandleFunc("/listing/", h.handleGetProducts).Methods(http.MethodGet)
 	router.HandleFunc("/listing/{productID}", h.handleGetProductById).Methods(http.MethodGet)
 
 	router.HandleFunc("/listing", h.handleCreateProduct).Methods(http.MethodPost)
@@ -48,19 +49,21 @@ func (h *Handler) handleGetProductById(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing product ID"))
 		return
 	}
-
 	productID, err := strconv.Atoi(str)
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid product ID"))
 		return
 	}
-
 	product, err := h.store.GetProductByID(productID)
 	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, err)
+		// check if it's a "not found" error
+		if strings.Contains(err.Error(), "not found") {
+			utils.WriteError(w, http.StatusNotFound, err)
+		} else {
+			utils.WriteError(w, http.StatusInternalServerError, err)
+		}
 		return
 	}
-
 	utils.WriteJSON(w, http.StatusOK, map[string]interface{}{
 		"data": product,
 	})
@@ -132,20 +135,19 @@ func (h *Handler) handleUpdateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: validate prodct data (optional fields)
-	var product types.UpdateProductPayload
-	if err := utils.ParseJSON(r, &product); err != nil {
+	var productPayload types.UpdateProductPayload
+	if err := utils.ParseJSON(r, &productPayload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	if err := utils.Validate.Struct(product); err != nil {
+	if err := utils.Validate.Struct(productPayload); err != nil {
 		errors := err.(validator.ValidationErrors)
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
 		return
 	}
 
-	updatedProduct, err := h.store.UpdateProduct(productID, product)
+	updatedProduct, err := h.store.UpdateProduct(productID, productPayload)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return

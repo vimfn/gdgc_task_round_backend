@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"vitshop.vimfn.in/services/product"
@@ -40,5 +41,14 @@ func (s *APIServer) Run() error {
 	}).Methods("GET")
 
 	log.Println("Listening on", s.addr)
-	return http.ListenAndServe(s.addr, router)
+
+	srv := &http.Server{
+		Handler: router,
+		Addr:    s.addr,
+		// good practice: enforce timeouts
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	return srv.ListenAndServe()
 }
