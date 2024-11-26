@@ -24,7 +24,7 @@ func NewAPIServer(addr string, db *sql.DB) APIServer {
 }
 
 func (s *APIServer) Run() error {
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 
 	// technically I should use `/api/v1` as subroute path prefix (best practices fyi.), but cuz the task didn't mention, i'm skipping this.
 
