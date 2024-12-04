@@ -1,3 +1,5 @@
+**update:** deployment is now disabled, got selected yay! please follow the quick start guide below.
+
 **edit:** use `curl -s -L http://141.148.222.253:8080/listing | jq .` (temporarily hosted, no ssl certs)
 
 ***note**: hi seniors, if you are looking for the hosted url as mentioned later in the readme, i couldn't host a go backend on a serverless environment (e.g., vercel, netlify). to compensate, i have added a dockerfile to spin it up locally with just one command. i also included a handy shell script to test all endpoints in one go. still, if you want me to host it temporarily, lmk in my uni email; i'll be happy to do so.*
